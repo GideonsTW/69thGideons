@@ -423,7 +423,8 @@
             width: 120px;
         }
 
-        .form-group #accountLastFive {
+        .form-group #accountLastFive,
+        .form-group #mealAccountLastFive {
             width: 80px;
             height: 36px;
             padding: 6px 10px;
@@ -434,12 +435,14 @@
             box-shadow: 0 1px 3px rgba(212, 175, 37, 0.1);
         }
 
-        .form-group #accountLastFive:focus {
+        .form-group #accountLastFive:focus,
+        .form-group #mealAccountLastFive:focus {
             outline: none;
             border-color: #B8972A;
             background: #FFFFFF;
             box-shadow: 0 0 6px rgba(212, 175, 37, 0.3);
         }
+
 
         @media (max-width: 600px) {
             .container {
@@ -655,8 +658,6 @@
                     <input type="tel" id="phone2" name="phone2" placeholder="例：0988000111"/>
                 </div>
             </div>
-
-            
 
           <div class="section-title" id="transportSection">2. 交通方式</div>
             <div class="form-group checkbox-group" id="transportOptions">
@@ -989,30 +990,75 @@
                 </div>
             </div>
 
-            <div class="section-title" id="mealCreditSection">7. 餐卷及小基甸活動費刷卡付款資訊</div>
-            <div class="form-group" id="mealCreditNumberOptions">
-                <label for="mealCreditNumber">信用卡號</label>
-                <div class="credit-card-row">
-                    <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
-                    <span>-</span>
-                    <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
-                    <span>-</span>
-                    <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
-                    <span>-</span>
-                    <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
+            <!-- 新增餐卷及活動費付款方式選擇 -->
+            <div class="form-group" id="mealPaymentOptions">
+                <label>餐卷及活動費付款方式</label>
+                <div class="price-option">
+                    <label><input type="radio" name="mealPaymentMethod" value="cash" onchange="toggleMealPaymentSections()"/> 現金付款</label>
+                    <label><input type="radio" name="mealPaymentMethod" value="card" onchange="toggleMealPaymentSections()"/> 刷卡付款</label>
                 </div>
             </div>
-            <div class="form-group" id="mealExpireDateOptions">
-                <label for="mealExpireDate">信用卡有效期限 (月/年)</label>
-                <div class="expire-date-row">
-                    <input type="text" name="mealExpireMonth" maxlength="2" placeholder="MM" class="meal-expire-month"/>
-                    <span>/</span>
-                    <input type="text" name="mealExpireYear" maxlength="2" placeholder="YY" class="meal-expire-year"/>
+
+            <!-- 餐卷及活動匯款資訊 -->
+            <div id="mealTransferPaymentSection" style="display: none;">
+                <div class="section-title" id="mealTransferSection">7. 餐卷及活動匯款資訊</div>
+                <div class="form-group">
+                    <div class="bank-info-container">
+                        <div class="bank-info-row">
+                            <span class="bank-label">銀行：</span>
+                            <span class="bank-detail">中華郵政</span>
+                        </div>
+                        <div class="bank-info-row">
+                            <span class="bank-label">代號：</span>
+                            <span class="bank-detail">700</span>
+                        </div>
+                        <div class="bank-info-row">
+                            <span class="bank-label">帳號：</span>
+                            <span class="bank-detail">0021009-1815261</span>
+                        </div>
+                        <div class="bank-info-row">
+                            <span class="bank-label">戶名：</span>
+                            <span class="bank-detail">社團法人國際基甸會中華民國總會</span>
+                        </div>
+                        <div class="bank-info-row amount-row">
+                            <span class="bank-label">金額：</span>
+                            <span class="bank-detail amount-highlight">NT$ <strong id="mealTransferAmount">0</strong></span>
+                        </div>
+                        <div class="bank-info-row note-row">
+                            <span class="bank-note">※ 請務必提供帳號末五碼</span>
+                            <input type="text" id="mealAccountLastFive" name="mealAccountLastFive" maxlength="5" placeholder="_ _ _ _ _" pattern="\d{5}" title="請輸入5位數字"/>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-group" id="mealAmountOptions">
-                <label for="mealAmount">餐卷刷卡金額 (NT$)</label>
-                <input type="text" id="mealAmount" name="mealAmount" readonly="readonly"/>
+
+            <!-- 餐卷及小基甸活動費刷卡付款資訊 -->
+            <div id="mealCreditPaymentSection" style="display: none;">
+                <div class="section-title" id="mealCreditSection">7. 餐卷及小基甸活動費刷卡付款資訊</div>
+                <div class="form-group" id="mealCreditNumberOptions">
+                    <label for="mealCreditNumber">信用卡號</label>
+                    <div class="credit-card-row">
+                        <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
+                        <span>-</span>
+                        <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
+                        <span>-</span>
+                        <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
+                        <span>-</span>
+                        <input type="text" name="mealCreditNumber" maxlength="4" placeholder="xxxx" class="meal-credit-input"/>
+                    </div>
+                </div>
+                <div class="form-group" id="mealExpireDateOptions">
+                    <label for="mealExpireDate">信用卡有效期限 (月/年)</label>
+                    <div class="expire-date-row">
+                        <input type="text" name="mealExpireMonth" maxlength="2" placeholder="MM" class="meal-expire-month"/>
+                        <span>/</span>
+                        <input type="text" name="mealExpireYear" maxlength="2" placeholder="YY" class="meal-expire-year"/>
+                    </div>
+                </div>
+                <div class="form-group" id="mealAmountOptions">
+                    <label for="mealAmount">餐卷及活動刷卡金額 (NT$)</label>
+                    <input type="text" id="mealAmount" name="mealAmount" readonly="readonly"/>
+                </div>
             </div>
 
             <div class="form-group">
@@ -1024,9 +1070,7 @@
         </form>
 
         <div id="result" class="result"></div>
-    </div>
-
-    <script>
+    </div>    <script>
         const branchesByRegion = {
             '台北特區': ['北一', '北二', '北三', '北四', '北五', '北六', '北七', '北八', '北九', '北十', '金門', '馬祖'],
             '北區': ['基隆', '汐止', '淡水', '雙和', '板橋', '海山', '三重', '新莊'],
@@ -1147,499 +1191,348 @@
                 });
             });
 
-            const creditInputs = document.querySelectorAll('.credit-input');
-            creditInputs.forEach((input, index) => {
-                input.addEventListener('input', function(e) {
-                    const value = this.value.replace(/\D/g, '');
-                    this.value = value.slice(0, 4);
-                    if (value.length === 4 && index < creditInputs.length - 1) {
-                        creditInputs[index + 1].focus();
-                    }
-                });
-            });
-
-            const expireMonthInput = document.querySelector('.expire-month');
-            const expireYearInput = document.querySelector('.expire-year');
-            expireMonthInput.addEventListener('input', function(e) {
+                   const creditInputs = document.querySelectorAll('.credit-input');
+        creditInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
                 const value = this.value.replace(/\D/g, '');
-                this.value = value.slice(0, 2);
-                if (value.length === 2) {
-                    expireYearInput.focus();
+                this.value = value;
+                if (value.length === 4 && index < creditInputs.length - 1) {
+                    creditInputs[index + 1].focus();
                 }
             });
-
-            const mealCreditInputs = document.querySelectorAll('.meal-credit-input');
-            mealCreditInputs.forEach((input, index) => {
-                input.addEventListener('input', function(e) {
-                    const value = this.value.replace(/\D/g, '');
-                    this.value = value.slice(0, 4);
-                    if (value.length === 4 && index < mealCreditInputs.length - 1) {
-                        mealCreditInputs[index + 1].focus();
-                    }
-                });
-            });
-
-            const mealExpireMonthInput = document.querySelector('.meal-expire-month');
-            const mealExpireYearInput = document.querySelector('.meal-expire-year');
-            mealExpireMonthInput.addEventListener('input', function(e) {
-                const value = this.value.replace(/\D/g, '');
-                this.value = value.slice(0, 2);
-                if (value.length === 2) {
-                    mealExpireYearInput.focus();
-                }
-            });
-
-            const youthInputs = [
-                'youthName1', 'youthName2', 'youthName3', 'youthName4', 'youthName5'
-            ];
-            youthInputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', updateYouthTotal);
-                }
-            });
-
-            const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            if (isMobile) {
-                youthInputs.forEach(id => {
-                    const input = document.getElementById(id);
-                    input.setAttribute('placeholder', '姓名');
-                });
-            }
-
-            const idInputs = ['youthId1', 'youthId2', 'youthId3', 'youthId4', 'youthId5'];
-            idInputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', function(e) {
-                        const value = this.value.replace(/[^A-Za-z0-9]/g, '');
-                        this.value = value.slice(0, 10);
-                    });
-                }
-            });
-
-            const phoneInputs = ['phone1', 'phone2'];
-            phoneInputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', function(e) {
-                        let value = this.value.replace(/[^0-9]/g, '');
-                        if (value.length > 10) value = value.slice(0, 10);
-                        if (value && !value.startsWith('09')) {
-                            value = '09' + value.slice(2);
-                        }
-                        this.value = value;
-                        if (value.length === 10 && !/^09[0-9]{8}$/.test(value)) {
-                            alert('請輸入有效的電話號碼，格式為 09XXXXXXXX！');
-                            this.value = '';
-                        }
-                    });
-                }
-            });
-
-            const dateInputs = [
-                'youthBirthdate1', 'youthBirthdate2', 'youthBirthdate3', 'youthBirthdate4', 'youthBirthdate5'
-            ];
-            dateInputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', function(e) {
-                        let value = this.value.replace(/[^0-9]/g, '');
-                        if (value.length > 8) value = value.slice(0, 8);
-
-                        if (value.length === 8) {
-                            const year = parseInt(value.slice(0, 4));
-                            const month = parseInt(value.slice(4, 6)) - 1;
-                            const day = parseInt(value.slice(6, 8));
-                            const date = new Date(year, month, day);
-
-                            if (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) {
-                                this.value = `${year}${String(month + 1).padStart(2, '0')}${String(day).padStart(2, '0')}`;
-                            } else {
-                                this.value = '';
-                                alert('請輸入有效的 YYYYMMDD 格式日期，例如 19990101！');
-                            }
-                        } else {
-                            this.value = value;
-                        }
-                    });
-                }
-            });
-
-            const accountLastFive = document.getElementById('accountLastFive');
-            if (accountLastFive) {
-                accountLastFive.addEventListener('input', function(e) {
-                    let value = this.value.replace(/\D/g, '');
-                    if (value.length > 5) value = value.slice(0, 5);
-                    this.value = value;
-                    if (value.length === 5 && !/^\d{5}$/.test(value)) {
-                        alert('請輸入5位數字！');
-                        this.value = '';
-                    }
-                });
-            }
-
-            // 初始化餐卷部分並綁定事件監聽器
-            initMealSection();
-            updateMealAmounts();
-            updateYouthTotal();
         });
 
-        function updatePriceOptions() {
-            const hotelInput = document.getElementById('hotel');
-            const selectedRoomDateCheckboxes = document.querySelectorAll('input[name="roomDate"]:checked');
-            const priceOptionsContainer = document.getElementById('priceOptionsContainer');
-            const priceDisplay = document.getElementById('priceDisplay');
-            const discountInfo = document.getElementById('discountInfo');
-            const amountInput = document.getElementById('amount');
-            const transferAmount = document.getElementById('transferAmount');
-            const shared = document.getElementById('shared').checked;
-            const arrangeShared = document.getElementById('arrangeShared').checked;
-            const single = document.getElementById('single').checked;
-            const couple = document.getElementById('couple').checked;
-
-            const selectedHotel = hotelInput.value;
-            const selectedRoomDates = Array.from(selectedRoomDateCheckboxes).map(checkbox => checkbox.value);
-
-            if (selectedHotel && selectedRoomDates.length > 0) {
-                priceOptionsContainer.style.display = 'block';
-                let totalCash = 0;
-                let totalCard = 0;
-
-                selectedRoomDates.forEach(date => {
-                    if (hotelData[selectedHotel][date]) {
-                        const priceData = hotelData[selectedHotel][date];
-                        const baseCash = priceData.price.cash;
-                        const baseCard = priceData.price.card;
-                        const discountFactor = (shared || arrangeShared) ? 0.5 : 1;
-                        totalCash += baseCash * discountFactor;
-                        totalCard += baseCard * discountFactor;
-                    }
-                });
-
-                priceDisplay.textContent = `（現金價: ${totalCash.toLocaleString()} 元，刷卡價: ${totalCard.toLocaleString()} 元）`;
-                priceDisplay.classList.remove('fade-in-out');
-                void priceDisplay.offsetWidth;
-                priceDisplay.classList.add('fade-in-out');
-
-                if (shared || arrangeShared) {
-                    discountInfo.textContent = '（優惠價，已應用五折折扣）';
-                } else if (single || couple) {
-                    discountInfo.textContent = '（優惠價）';
-                } else {
-                    discountInfo.textContent = '';
+        const mealCreditInputs = document.querySelectorAll('.meal-credit-input');
+        mealCreditInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                const value = this.value.replace(/\D/g, '');
+                this.value = value;
+                if (value.length === 4 && index < mealCreditInputs.length - 1) {
+                    mealCreditInputs[index + 1].focus();
                 }
-                discountInfo.classList.remove('fade-in-out');
-                void discountInfo.offsetWidth;
-                discountInfo.classList.add('fade-in-out');
+            });
+        });
 
-                transferAmount.textContent = totalCash.toLocaleString();
-                transferAmount.classList.remove('fade-in-out');
-                void transferAmount.offsetWidth;
-                transferAmount.classList.add('fade-in-out');
+        const expireMonthInput = document.querySelector('.expire-month');
+        const expireYearInput = document.querySelector('.expire-year');
+        expireMonthInput.addEventListener('input', function(e) {
+            const value = this.value.replace(/\D/g, '');
+            this.value = value;
+            if (value.length === 2) {
+                expireYearInput.focus();
+            }
+        });
+        expireYearInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
 
-                const paymentTypeRadios = document.querySelectorAll('input[name="paymentType"]');
-                paymentTypeRadios.forEach(radio => {
-                    radio.removeEventListener('change', updateAmount);
-                    radio.addEventListener('change', updateAmount);
-                });
+        const mealExpireMonthInput = document.querySelector('.meal-expire-month');
+        const mealExpireYearInput = document.querySelector('.meal-expire-year');
+        mealExpireMonthInput.addEventListener('input', function(e) {
+            const value = this.value.replace(/\D/g, '');
+            this.value = value;
+            if (value.length === 2) {
+                mealExpireYearInput.focus();
+            }
+        });
+        mealExpireYearInput.addEventListener('input', function(e) {
+            this.value = this.value.replace(/\D/g, '');
+        });
 
-                function updateAmount() {
-                    const selectedPaymentType = document.querySelector('input[name="paymentType"]:checked');
-                    if (selectedPaymentType) {
+        const mealInputs = document.querySelectorAll('#mealTicketCount, #brotherCount, #sisterCount, #meal28DinnerCount, #meal29LunchCount, #meal29DinnerCount, #meal30BrotherLunchCount, #meal30SisterLunchCount');
+        mealInputs.forEach(input => {
+            input.addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+                updateMealAmounts();
+            });
+        });
 
-                        amountInput.value = selectedPaymentType.value === 'card' ? totalCard.toLocaleString() : totalCash.toLocaleString();
-                        amountInput.classList.remove('fade-in-out');
-                        void amountInput.offsetWidth;
-                        amountInput.classList.add('fade-in-out');
+        const youthInputs = document.querySelectorAll('input[name^="youthName"]');
+        youthInputs.forEach(input => {
+            input.addEventListener('input', updateYouthTotal);
+        });
 
-                        transferAmount.textContent = totalCash.toLocaleString();
-                        transferAmount.classList.remove('fade-in-out');
-                        void transferAmount.offsetWidth;
-                        transferAmount.classList.add('fade-in-out');
+        updateMealAmounts();
+        updateYouthTotal();
+    });
 
-                        togglePaymentSections();
-                    }
+    function updatePriceOptions() {
+        const selectedRoomDates = Array.from(document.querySelectorAll('input[name="roomDate"]:checked')).map(cb => cb.value);
+        const hotelInput = document.getElementById('hotel');
+        const selectedHotel = hotelInput.value;
+        const accommodationType = document.querySelector('input[name="accommodationType"]:checked')?.value || '';
+        const priceOptionsContainer = document.getElementById('priceOptionsContainer');
+        const priceDisplay = document.getElementById('priceDisplay');
+        const discountInfo = document.getElementById('discountInfo');
+        const paymentTypeRadios = document.querySelectorAll('input[name="paymentType"]');
+
+        priceOptionsContainer.style.display = 'none';
+        priceDisplay.textContent = '';
+        discountInfo.textContent = '';
+        paymentTypeRadios.forEach(radio => radio.checked = false);
+        togglePaymentSections();
+
+        if (selectedRoomDates.length > 0 && selectedHotel) {
+            let totalCashPrice = 0;
+            let totalCardPrice = 0;
+            let totalCapacity = 0;
+
+            selectedRoomDates.forEach(room => {
+                const roomData = hotelData[selectedHotel][room];
+                if (roomData) {
+                    totalCashPrice += roomData.price.cash;
+                    totalCardPrice += roomData.price.card;
+                    totalCapacity += roomData.capacity;
                 }
+            });
 
-                const defaultPaymentType = document.querySelector('input[name="paymentType"][value="cash"]');
-                if (!document.querySelector('input[name="paymentType"]:checked')) {
-                    defaultPaymentType.checked = true;
-                }
-                updateAmount();
+            const isSingle = accommodationType === '單人住宿';
+            const isCouple = accommodationType === '夫妻合住';
+            const isShared = accommodationType === '與人合住' || accommodationType === '總會安排';
+
+            if (isSingle && totalCapacity > 1) {
+                totalCashPrice = Math.round(totalCashPrice / 2);
+                totalCardPrice = Math.round(totalCardPrice / 2);
+            } else if ((isCouple || isShared) && totalCapacity === 1) {
+                totalCashPrice *= 2;
+                totalCardPrice *= 2;
+            }
+
+            priceOptionsContainer.style.display = 'block';
+            priceDisplay.textContent = `現金價: ${totalCashPrice} 元 / 刷卡價: ${totalCardPrice} 元`;
+            discountInfo.textContent = '※ 選擇現金付款可享折扣優惠';
+
+            document.getElementById('amount').value = totalCardPrice;
+            document.getElementById('transferAmount').textContent = totalCashPrice;
+        }
+    }
+
+    function togglePaymentSections() {
+        const paymentType = document.querySelector('input[name="paymentType"]:checked')?.value;
+        const creditSection = document.getElementById('creditPaymentSection');
+        const transferSection = document.getElementById('transferPaymentSection');
+
+        creditSection.style.display = 'none';
+        transferSection.style.display = 'none';
+
+        if (paymentType === 'card') {
+            creditSection.style.display = 'block';
+            creditSection.classList.add('fade-in-out');
+        } else if (paymentType === 'cash') {
+            transferSection.style.display = 'block';
+            transferSection.classList.add('fade-in-out');
+        }
+    }
+
+    function toggleMealPaymentSections() {
+        const mealPaymentMethod = document.querySelector('input[name="mealPaymentMethod"]:checked')?.value;
+        const mealCreditSection = document.getElementById('mealCreditPaymentSection');
+        const mealTransferSection = document.getElementById('mealTransferPaymentSection');
+
+        mealCreditSection.style.display = 'none';
+        mealTransferSection.style.display = 'none';
+
+        if (mealPaymentMethod === 'card') {
+            mealCreditSection.style.display = 'block';
+            mealCreditSection.classList.add('fade-in-out');
+        } else if (mealPaymentMethod === 'cash') {
+            mealTransferSection.style.display = 'block';
+            mealTransferSection.classList.add('fade-in-out');
+        }
+
+        updateMealAmounts();
+    }
+
+    function updateMealAmounts() {
+    const mealTicketCount = parseInt(document.getElementById('mealTicketCount').value) || 0;
+    const brotherCount = parseInt(document.getElementById('brotherCount').value) || 0;
+    const sisterCount = parseInt(document.getElementById('sisterCount').value) || 0;
+    const meal28DinnerCount = parseInt(document.getElementById('meal28DinnerCount').value) || 0;
+    const meal29LunchCount = parseInt(document.getElementById('meal29LunchCount').value) || 0;
+    const meal29DinnerCount = parseInt(document.getElementById('meal29DinnerCount').value) || 0;
+    const meal30BrotherLunchCount = parseInt(document.getElementById('meal30BrotherLunchCount').value) || 0;
+    const meal30SisterLunchCount = parseInt(document.getElementById('meal30SisterLunchCount').value) || 0;
+
+    const mealTicketTotal = mealTicketCount * 4300;
+    document.getElementById('mealTicketAmount').textContent = mealTicketTotal;
+
+    const meal28DinnerTotal = meal28DinnerCount * 1300;
+    document.getElementById('meal28DinnerTotal').textContent = meal28DinnerTotal;
+
+    const meal29LunchTotal = meal29LunchCount * 1000;
+    document.getElementById('meal29LunchTotal').textContent = meal29LunchTotal;
+
+    const meal29DinnerTotal = meal29DinnerCount * 1300;
+    document.getElementById('meal29DinnerTotal').textContent = meal29DinnerTotal;
+
+    const meal30BrotherLunchTotal = meal30BrotherLunchCount * 1000;
+    document.getElementById('meal30BrotherLunchTotal').textContent = meal30BrotherLunchTotal;
+
+    const meal30SisterLunchTotal = meal30SisterLunchCount * 1000;
+    document.getElementById('meal30SisterLunchTotal').textContent = meal30SisterLunchTotal;
+
+    const totalMealAmount = mealTicketTotal + meal28DinnerTotal + meal29LunchTotal + meal29DinnerTotal + meal30BrotherLunchTotal + meal30SisterLunchTotal;
+    document.getElementById('mealTotalAmount').textContent = totalMealAmount;
+    document.getElementById('mealTotalDisplay').textContent = totalMealAmount;
+
+    // 獲取小基甸活動的費用
+    const youthTotal = parseInt(document.getElementById('youthTotal').textContent) || 0;
+
+    // 計算餐卷及活動費的總金額
+    const totalMealAndYouthAmount = totalMealAmount + youthTotal;
+
+    // 更新餐卷及活動費的刷卡金額和匯款金額
+    document.getElementById('mealAmount').value = totalMealAndYouthAmount;
+    document.getElementById('mealTransferAmount').textContent = totalMealAndYouthAmount;
+
+    updateGrandTotal();
+}
+
+    function updateYouthTotal() {
+    const youthNames = document.querySelectorAll('input[name^="youthName"]');
+    let youthCount = 0;
+
+    youthNames.forEach(input => {
+        if (input.value.trim() !== '') {
+            youthCount++;
+        }
+    });
+
+    const youthTotal = youthCount * 1000;
+    document.getElementById('youthSubtotal').textContent = youthCount;
+    document.getElementById('youthTotal').textContent = youthTotal;
+    document.getElementById('youthTotalDisplay').textContent = youthTotal;
+
+    // 當小基甸活動費用更新時，也更新餐卷及活動費的金額
+    updateMealAmounts();
+}
+
+    function updateGrandTotal() {
+        const mealTotal = parseInt(document.getElementById('mealTotalAmount').textContent) || 0;
+        const youthTotal = parseInt(document.getElementById('youthTotal').textContent) || 0;
+        const grandTotal = mealTotal + youthTotal;
+        document.getElementById('grandTotal').textContent = grandTotal;
+    }
+
+    function submitForm() {
+        const form = document.getElementById('reservationForm');
+        const formData = new FormData(form);
+        const resultDiv = document.getElementById('result');
+        const selectedRoomDates = Array.from(document.querySelectorAll('input[name="roomDate"]:checked')).map(cb => cb.value);
+        let selectedPaymentType = document.querySelector('input[name="paymentType"]:checked')?.value || '未選擇';
+        let selectedMealPaymentMethod = document.querySelector('input[name="mealPaymentMethod"]:checked')?.value || '未選擇';
+
+        const paymentTypeMap = {
+            'cash': '現金',
+            'card': '刷卡',
+            '未選擇': '未選擇'
+        };
+
+        const displayPaymentType = paymentTypeMap[selectedPaymentType] || selectedPaymentType;
+        const displayMealPaymentMethod = paymentTypeMap[selectedMealPaymentMethod] || selectedMealPaymentMethod;
+
+        const data = {};
+        formData.forEach((value, key) => {
+            if (key === 'roomDate') {
+                if (!data[key]) data[key] = [];
+                data[key].push(value);
+            } else if (key === 'creditNumber' || key === 'mealCreditNumber') {
+                if (!data[key]) data[key] = [];
+                data[key].push(value);
             } else {
-                priceOptionsContainer.style.display = 'none';
-                priceDisplay.textContent = '';
-                discountInfo.textContent = '';
-                amountInput.value = '';
-                transferAmount.textContent = '0';
-                document.getElementById('creditPaymentSection').style.display = 'none';
-                document.getElementById('transferPaymentSection').style.display = 'none';
+                data[key] = value;
             }
+        });
+
+        if (data.creditNumber && data.creditNumber.length === 4) {
+            data.creditNumber = data.creditNumber.join('-');
+        } else {
+            data.creditNumber = '未填寫';
         }
 
-        function togglePaymentSections() {
-            const selectedPaymentType = document.querySelector('input[name="paymentType"]:checked');
-            const creditSection = document.getElementById('creditPaymentSection');
-            const transferSection = document.getElementById('transferPaymentSection');
-
-            if (selectedPaymentType) {
-                if (selectedPaymentType.value === 'cash') {
-                    creditSection.style.display = 'none';
-                    transferSection.style.display = 'block';
-                } else if (selectedPaymentType.value === 'card') {
-                    creditSection.style.display = 'block';
-                    transferSection.style.display = 'none';
-                }
-            } else {
-                creditSection.style.display = 'none';
-                transferSection.style.display = 'none';
-            }
+        if (data.mealCreditNumber && data.mealCreditNumber.length === 4) {
+            data.mealCreditNumber = data.mealCreditNumber.join('-');
+        } else {
+            data.mealCreditNumber = '未填寫';
         }
 
-        function initMealSection() {
-            const mealInputs = [
-                'mealTicketCount',
-                'meal28DinnerCount', 'meal29LunchCount', 'meal29DinnerCount',
-                'meal30BrotherLunchCount', 'meal30SisterLunchCount'
-            ];
+        data['roomDate'] = selectedRoomDates;
+        data['paymentType'] = displayPaymentType;
+        data['mealPaymentMethod'] = displayMealPaymentMethod;
 
-            mealInputs.forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', () => {
-                        let value = parseInt(input.value) || 0;
-                        if (value < 0) value = 0;
-                        input.value = value;
-                        updateMealAmounts();
-                    });
-                } else {
-                    console.warn(`找不到 ID 為 ${id} 的元素，請檢查 HTML！`);
-                }
-            });
-
-            // 仍然保留 brotherCount 和 sisterCount 的事件監聽，但僅用於確保輸入值有效
-            ['brotherCount', 'sisterCount'].forEach(id => {
-                const input = document.getElementById(id);
-                if (input) {
-                    input.addEventListener('input', () => {
-                        let value = parseInt(input.value) || 0;
-                        if (value < 0) value = 0;
-                        input.value = value;
-                        // 不需要調用 updateMealAmounts，因為不影響金額
-                    });
-                }
-            });
-
-            updateMealAmounts();
-        }
-
-        function updateMealAmounts() {
-            const mealTicketCount = parseInt(document.getElementById('mealTicketCount').value) || 0;
-            const meal28DinnerCount = parseInt(document.getElementById('meal28DinnerCount').value) || 0;
-            const meal29LunchCount = parseInt(document.getElementById('meal29LunchCount').value) || 0;
-            const meal29DinnerCount = parseInt(document.getElementById('meal29DinnerCount').value) || 0;
-            const meal30BrotherLunchCount = parseInt(document.getElementById('meal30BrotherLunchCount').value) || 0;
-            const meal30SisterLunchCount = parseInt(document.getElementById('meal30SisterLunchCount').value) || 0;
-
-            const mealTicketAmount = mealTicketCount * 4300;
-            const meal28DinnerTotal = meal28DinnerCount * 1300;
-            const meal29LunchTotal = meal29LunchCount * 1000;
-            const meal29DinnerTotal = meal29DinnerCount * 1300;
-            const meal30BrotherLunchTotal = meal30BrotherLunchCount * 1000;
-            const meal30SisterLunchTotal = meal30SisterLunchCount * 1000;
-
-            const mealTotalAmount = mealTicketAmount +
-                                   meal28DinnerTotal + meal29LunchTotal + meal29DinnerTotal +
-                                   meal30BrotherLunchTotal + meal30SisterLunchTotal;
-
-            const elementsToUpdate = [
-                { id: 'mealTicketAmount', value: mealTicketAmount },
-                { id: 'meal28DinnerTotal', value: meal28DinnerTotal },
-                { id: 'meal29LunchTotal', value: meal29LunchTotal },
-                { id: 'meal29DinnerTotal', value: meal29DinnerTotal },
-                { id: 'meal30BrotherLunchTotal', value: meal30BrotherLunchTotal },
-                { id: 'meal30SisterLunchTotal', value: meal30SisterLunchTotal },
-                { id: 'mealTotalAmount', value: mealTotalAmount },
-                { id: 'mealTotalDisplay', value: mealTotalAmount }
-            ];
-
-            elementsToUpdate.forEach(({ id, value }) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.textContent = value.toLocaleString();
-                    element.classList.remove('fade-in-out');
-                    void element.offsetWidth;
-                    element.classList.add('fade-in-out');
-                } else {
-                    console.warn(`找不到 ID 為 ${id} 的元素，請檢查 HTML！`);
-                }
-            });
-
-            updateTotalAmount();
-        }
-
-        function updateYouthTotal() {
-            const youthNames = [
-                document.getElementById('youthName1').value,
-                document.getElementById('youthName2').value,
-                document.getElementById('youthName3').value,
-                document.getElementById('youthName4').value,
-                document.getElementById('youthName5').value
-            ];
-            const youthCount = youthNames.filter(name => name.trim() !== '').length;
-            const youthTotal = youthCount * 1000;
-
-            const youthSubtotalElement = document.getElementById('youthSubtotal');
-            if (youthSubtotalElement) {
-                youthSubtotalElement.textContent = youthCount.toLocaleString();
-                youthSubtotalElement.classList.remove('fade-in-out');
-                void youthSubtotalElement.offsetWidth;
-                youthSubtotalElement.classList.add('fade-in-out');
+        fetch(form.action, {
+            method: 'POST',
+            body: new URLSearchParams(data).toString(),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
             }
-
-            const youthTotalElement = document.getElementById('youthTotal');
-            if (youthTotalElement) {
-                youthTotalElement.textContent = youthTotal.toLocaleString();
-                youthTotalElement.classList.remove('fade-in-out');
-                void youthTotalElement.offsetWidth;
-                youthTotalElement.classList.add('fade-in-out');
-            }
-
-            const youthTotalDisplayElement = document.getElementById('youthTotalDisplay');
-            if (youthTotalDisplayElement) {
-                youthTotalDisplayElement.textContent = youthTotal.toLocaleString();
-                youthTotalDisplayElement.classList.remove('fade-in-out');
-                void youthTotalDisplayElement.offsetWidth;
-                youthTotalDisplayElement.classList.add('fade-in-out');
-            }
-
-            updateTotalAmount();
-        }
-
-        function updateTotalAmount() {
-            const mealTotalElement = document.getElementById('mealTotalAmount');
-            const youthTotalElement = document.getElementById('youthTotal');
-            const mealTotal = mealTotalElement ? parseInt(mealTotalElement.textContent.replace(/,/g, '')) || 0 : 0;
-            const youthTotal = youthTotalElement ? parseInt(youthTotalElement.textContent.replace(/,/g, '')) || 0 : 0;
-            const grandTotal = mealTotal + youthTotal;
-
-            const grandTotalElement = document.getElementById('grandTotal');
-            if (grandTotalElement) {
-                grandTotalElement.textContent = grandTotal.toLocaleString();
-                grandTotalElement.classList.remove('fade-in-out');
-                void grandTotalElement.offsetWidth;
-                grandTotalElement.classList.add('fade-in-out');
-            }
-
-            const mealAmountInput = document.getElementById('mealAmount');
-            if (mealAmountInput) {
-                mealAmountInput.value = mealTotal.toLocaleString();
-                mealAmountInput.classList.remove('fade-in-out');
-                void mealAmountInput.offsetWidth;
-                mealAmountInput.classList.add('fade-in-out');
-            }
-        }
-
-        function submitForm() {
-            const form = document.getElementById('reservationForm');
-            const resultDiv = document.getElementById('result');
-            const name1 = document.getElementById('name1').value;
-            const phone1 = document.getElementById('phone1').value;
-            const transport = document.querySelector('input[name="transport"]:checked')?.value || '未選擇';
-            const accommodationType = document.querySelector('input[name="accommodationType"]:checked')?.value || '未選擇';
-            const hotel = document.getElementById('hotel').value || '未選擇';
-            const roomDates = Array.from(document.querySelectorAll('input[name="roomDate"]:checked')).map(cb => cb.value).join(', ') || '未選擇';
-            const paymentType = document.querySelector('input[name="paymentType"]:checked')?.value || '未選擇';
-            const mealTotal = parseInt(document.getElementById('mealTotalAmount').textContent.replace(/,/g, '')) || 0;
-            const youthTotal = parseInt(document.getElementById('youthTotal').textContent.replace(/,/g, '')) || 0;
-            const grandTotal = parseInt(document.getElementById('grandTotal').textContent.replace(/,/g, '')) || 0;
-            const brotherCount = parseInt(document.getElementById('brotherCount').value) || 0;
-            const sisterCount = parseInt(document.getElementById('sisterCount').value) || 0;
-
-            // 驗證必填欄位
-            if (!name1 || !phone1) {
-                alert('請填寫所有必填欄位（姓名 1 和聯絡電話 1）！');
-                return false;
-            }
-
-            // 如果選擇了匯款，驗證帳號末五碼
-            if (paymentType === 'cash') {
-                const accountLastFive = document.getElementById('accountLastFive').value;
-                if (!accountLastFive || accountLastFive.length !== 5 || !/^\d{5}$/.test(accountLastFive)) {
-                    alert('請輸入有效的帳號末五碼（必須為5位數字）！');
-                    return false;
-                }
-            }
-
-            // 收集青少年活動資料
-            const youthData = [];
-            for (let i = 1; i <= 5; i++) {
-                const name = document.getElementById(`youthName${i}`).value;
-                const gender = document.querySelector(`input[name="youthGender${i}"]:checked`)?.value || '';
-                const birthdate = document.getElementById(`youthBirthdate${i}`).value;
-                const id = document.getElementById(`youthId${i}`).value;
-                if (name) {
-                    youthData.push({ name, gender, birthdate, id });
-                }
-            }
-
-            // 顯示提交結果
-            resultDiv.innerHTML = `
-                <h3>報名資料確認</h3>
-                <p><strong>姓名 1：</strong> ${name1}</p>
-                <p><strong>聯絡電話 1：</strong> ${phone1}</p>
-                <p><strong>交通方式：</strong> ${transport}                <p><strong>住宿選擇：</strong> ${accommodationType}</p>
-                <p><strong>飯店：</strong> ${hotel}</p>
-                <p><strong>房型與日期：</strong> ${roomDates}</p>
-                <p><strong>付款方式：</strong> ${paymentType === 'cash' ? '現金匯款' : '信用卡'}</p>
-                <p><strong>週六午餐人數：</strong> 弟兄 ${brotherCount} 位，姊妹 ${sisterCount} 位</p>
-                <p><strong>餐卷費用：</strong> ${mealTotal.toLocaleString()} 元</p>
-                <p><strong>青少年活動費用：</strong> ${youthTotal.toLocaleString()} 元</p>
-                <p><strong>總金額：</strong> ${grandTotal.toLocaleString()} 元</p>
-                ${youthData.length > 0 ? `
-                    <p><strong>青少年活動報名資料：</strong></p>
-                    ${youthData.map((youth, index) => `
-                        <p>青少年 ${index + 1}：<br>
-                        姓名：${youth.name}<br>
-                        性別：${youth.gender || '未填寫'}<br>
-                        生日：${youth.birthdate || '未填寫'}<br>
-                        身分證字號：${youth.id || '未填寫'}</p>
-                    `).join('')}
-                ` : ''}
-            `;
+        })
+        .then(response => response.json())
+        .then(result => {
             resultDiv.style.display = 'block';
-            resultDiv.scrollIntoView({ behavior: 'smooth' });
+            resultDiv.innerHTML = `
+                <h3>報名成功！</h3>
+                <p>區域：${data.region}</p>
+                <p>支會：${data.branch}</p>
+                <p>姓名 1：${data.name1}</p>
+                <p>姓名 2：${data.name2 || '無'}</p>
+                <p>聯絡電話 1：${data.phone1}</p>
+                <p>聯絡電話 2：${data.phone2 || '無'}</p>
+                <p>交通方式：${data.transport || '未選擇'}</p>
+                <p>車號：${data.carNumber || '無'}</p>
+                <p>住宿發票公司全名：${data.companyName || '無'}</p>
+                <p>住宿發票公司統編：${data.companyId || '無'}</p>
+                <p>住宿類型：${data.accommodationType || '未選擇'}</p>
+                <p>同住人姓名：${data.sharedName || '無'}</p>
+                <p>飯店：${data.hotel || '未選擇'}</p>
+                <p>房間日期：${data.roomDate.join(', ') || '未選擇'}</p>
+                <p>付款方式：${displayPaymentType}</p>
+                ${displayPaymentType === '刷卡' ? `
+                    <p>信用卡號：${data.creditNumber}</p>
+                    <p>信用卡有效期限：${data.expireMonth}/${data.expireYear}</p>
+                    <p>飯店刷卡金額：${data.amount} 元</p>
+                ` : `
+                    <p>匯款金額：${document.getElementById('transferAmount').textContent} 元</p>
+                    <p>帳號末五碼：${data.accountLastFive || '未填寫'}</p>
+                `}
+                <p>餐卷全套數量：${data.mealTicketCount || 0}</p>
+                <p>8/28(四)晚餐數量：${data.meal28DinnerCount || 0}</p>
+                <p>8/29(五)自助式午餐數量：${data.meal29LunchCount || 0}</p>
+                <p>8/29(五)牧師宴數量：${data.meal29DinnerCount || 0}</p>
+                <p>8/30(六)弟兄自助式午餐數量：${data.meal30BrotherLunchCount || 0}</p>
+                <p>8/30(六)姊妹自助式午餐數量：${data.meal30SisterLunchCount || 0}</p>
+                <p>餐卷總金額：${document.getElementById('mealTotalAmount').textContent} 元</p>
+                <p>小基甸活動參加人數：${document.getElementById('youthSubtotal').textContent}</p>
+                <p>小基甸活動總金額：${document.getElementById('youthTotal').textContent} 元</p>
+                <p>餐卷及活動費付款方式：${displayMealPaymentMethod}</p>
+                ${displayMealPaymentMethod === '刷卡' ? `
+                    <p>餐卷及活動費信用卡號：${data.mealCreditNumber}</p>
+                    <p>餐卷及活動費信用卡有效期限：${data.mealExpireMonth}/${data.mealExpireYear}</p>
+                    <p>餐卷及活動費刷卡金額：${document.getElementById('mealAmount').value} 元</p>
+                ` : `
+                    <p>餐卷及活動費匯款金額：${document.getElementById('mealTransferAmount').textContent} 元</p>
+                    <p>餐卷及活動費帳號末五碼：${data.mealAccountLastFive || '未填寫'}</p>
+                `}
+                <p>特別備註：${data.specialRequests || '無'}</p>
+            `;
+            form.reset();
+            document.querySelectorAll('.hotel-content').forEach(content => content.classList.remove('active'));
+            document.getElementById('priceOptionsContainer').style.display = 'none';
+            document.getElementById('creditPaymentSection').style.display = 'none';
+            document.getElementById('transferPaymentSection').style.display = 'none';
+            document.getElementById('mealCreditPaymentSection').style.display = 'none';
+            document.getElementById('mealTransferPaymentSection').style.display = 'none';
+            updateMealAmounts();
+            updateYouthTotal();
+        })
+        .catch(error => {
+            console.error('提交表單時發生錯誤:', error);
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `<h3>報名失敗</h3><p>發生錯誤，請稍後再試或聯絡管理員！</p>`;
+        });
 
-            // 提交表單到 Google Apps Script
-            const formData = new FormData(form);
-            fetch(form.action, {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
-                    alert('報名成功！感謝您的參與！');
-                    form.reset();
-                    resultDiv.style.display = 'none';
-                    document.querySelectorAll('.hotel-content').forEach(content => content.classList.remove('active'));
-                    document.getElementById('priceOptionsContainer').style.display = 'none';
-                    document.getElementById('creditPaymentSection').style.display = 'none';
-                    document.getElementById('transferPaymentSection').style.display = 'none';
-                    updateMealAmounts();
-                    updateYouthTotal();
-                } else {
-                    alert('報名失敗，請稍後再試！');
-                }
-            })
-            .catch(error => {
-                console.error('提交錯誤:', error);
-                alert('提交過程中發生錯誤，請稍後再試！');
-            });
-
-            return false; // 防止表單直接提交
-        }
+        return false;
+    }
     </script>
 </body>
 </html>
